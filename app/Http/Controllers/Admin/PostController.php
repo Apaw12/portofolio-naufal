@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
-use App\Models\Category; 
+use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -38,38 +38,53 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+public function store(Request $request)
 {
-    // 1. Validasi data dan file
-    $validated = $request->validate([
+    // 1. Validasi Input
+    $request->validate([
+        'title'       => 'required|string|max:255',
+        'slug'        => 'required|string|max:255|unique:posts,slug',
         'category_id' => 'required|exists:categories,id',
-        'title' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:posts',
-        'excerpt' => 'required|string',
-        'body' => 'required|string',
-        'is_published' => 'nullable|boolean',
-        // VALIDASI FILE GAMBAR
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Max 2MB
+        'excerpt'     => 'required',
+        'body'        => 'required',
+        'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
     ]);
 
+    // 2. Siapkan Data
+    $data = $request->all();
 
-    // 2. Tambahkan user_id secara otomatis
-    $validated['user_id'] = auth()->id();
+    // Isi user_id otomatis pakai user yang sedang login
+    $data['user_id'] = auth()->id();
 
-    // 3. Proses Status Publikasi (Checkbox)
-    $validated['is_published'] = $request->has('is_published');
-
-    // 4. Proses Upload Gambar
+    // 3. LOGIKA UPLOAD GAMBAR KE PUBLIC/IMG/POSTS
     if ($request->hasFile('image')) {
-        $path = $request->file('image')->store('images/posts', 'public');
-        $validated['image'] = $path;
+        $file = $request->file('image');
+
+        // Generate nama file unik: time_namafile.jpg
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // PINDAHKAN FILE KE FOLDER PUBLIC
+        // Tujuannya: public/img/posts
+        $file->move(public_path('img/posts'), $filename);
+
+        // Simpan path string ke database (biar bisa dipanggil asset())
+        // Format: posts/namafile.jpg
+        $data['image'] = 'posts/' . $filename;
     }
 
-    // 5. Simpan data ke database
-    Post::create($validated);
+    // 4. Handle Published Status
+    // Pastikan checkbox bernilai boolean (1 atau 0)
+    $data['is_published'] = $request->has('is_published') ? 1 : 0;
 
-    // 6. Kembali ke halaman daftar posts dengan pesan sukses
-    return redirect()->route('admin.posts.index')->with('success', 'Post baru berhasil ditambahkan!');
+    // Isi tanggal publish kalau dicentang
+    if ($data['is_published']) {
+        $data['published_at'] = now();
+    }
+
+    // 5. Simpan ke Database
+    \App\Models\Post::create($data);
+
+    return redirect()->route('admin.posts.index')->with('success', 'Artikel berhasil ditambahkan!');
 }
 
     /**
@@ -104,7 +119,7 @@ class PostController extends Controller
         'body' => 'required|string',
         'is_published' => 'nullable|boolean',
         // Jika ada gambar baru, validasi
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', 
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
     ]);
 
     // 2. Proses Status Publikasi
@@ -134,7 +149,7 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         // GANTI FUNGSI KOSONG DENGAN INI
-        
+
         // 1. Cari Post
         $post = Post::findOrFail($id);
 

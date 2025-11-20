@@ -33,7 +33,7 @@
             <h1 class="detail-title">{{ $project->title }}</h1>
 
             @if ($project->image)
-                <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="detail-image">
+                <img src="{{ asset('img/' . $project->image) }}" alt="{{ $project->title }}" class="detail-image">
             @endif
 
             <div class="project-info card">

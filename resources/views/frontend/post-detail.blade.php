@@ -31,7 +31,7 @@
             <a href="{{ route('home') }}#blog" class="back-link">&larr; Kembali ke Home</a>
 
             <h1 class="detail-title">{{ $post->title }}</h1>
-            
+
             <div class="author-bio-large">
                 <img src="{{ asset('images/ganteng.jpg') }}" alt="Foto Naufal" class="author-avatar-large">
                 <div>
@@ -42,11 +42,11 @@
             </div>
 
             @if ($post->image)
-                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="detail-image">
+                <img src="{{ asset('img/' . $post->image) }}" alt="{{ $post->title }}" class="detail-image">
             @endif
 
             <div class="detail-content">
-                <p>{{ $post->body }}</p>
+                <p>{!! nl2br(e($post->body)) !!}</p>
             </div>
         </div>
     </main>

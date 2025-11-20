@@ -27,7 +27,7 @@
     </header>
 
     <main class="container">
-        
+
         <section class="hero" id="hero">
             <div class="hero-text">
                 <h2 class="hero-title">HI!, Selamat datang Teman!</h2>
@@ -37,14 +37,14 @@
                 <img src="{{ asset('images/ganteng.jpg') }}" alt="Foto Naufal">
             </div>
         </section>
-        
+
         <section class="projects-section" id="projects">
             <h3 class="section-title">Featured Projects ({{ $featured_projects->count() }})</h3>
             <div class="grid-3-col">
                 @forelse ($featured_projects as $project)
                     <div class="card">
                         @if ($project->image)
-                            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="card-image">
+                            <img src="{{ asset('img/' . $project->image) }}" alt="{{ $project->title }}" class="card-image">
                         @endif
                         <div class="card-content">
                             <h4 class="card-title">{{ $project->title }}</h4>
@@ -68,12 +68,12 @@
                             <span class="card-category">{{ $post->category->name }}</span>
                             <h4 class="card-title">{{ $post->title }}</h4>
                             <p class="card-excerpt">{{ Str::limit($post->excerpt, 100) }}</p>
-                            
+
                             <div class="author-bio">
                                 <img src="{{ asset('images/ganteng.jpg') }}" alt="Foto Naufal" class="author-avatar">
                                 <p class="author-name">Oleh: {{ $post->user->name }}</p>
                             </div>
-                            
+
                             <a href="{{ route('post.show', $post->slug) }}" class="card-link">Baca Selengkapnya &rarr;</a>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                 @endforelse
             </div>
         </section>
-        
+
     </main>
 </body>
 </html>

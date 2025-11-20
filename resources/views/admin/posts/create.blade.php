@@ -8,7 +8,7 @@
     <div class="admin-page">
         <div class="admin-card">
             <div class="admin-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
-                <h2 style="font-size:1.5rem; font-weight:700; color:#fff;">Tambah Post Baru</h2>
+                <h2 style="font-size:1.5rem; font-weight:700; color:#fff;">Tambah Artikel/Post</h2>
                 <a href="{{ route('admin.posts.index') }}" class="btn">Kembali</a>
             </div>
 
@@ -16,173 +16,61 @@
                 @csrf
 
                 <div class="form-row">
-                    <label for="category_id">Kategori</label>
-                    <select id="category_id" name="category_id">
+                    <label for="category_id">Pilih Kategori</label>
+                    <select id="category_id" name="category_id" required style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid #333; width: 100%; padding: 0.5rem;">
+                        <option value="" disabled selected>-- Pilih Kategori --</option>
                         @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
                         @endforeach
                     </select>
                     <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
                 </div>
 
                 <div class="form-row">
-                    <label for="title">Judul</label>
-                    <x-text-input id="title" type="text" name="title" :value="old('title')" required autofocus />
+                    <label for="title">Judul Artikel</label>
+                    <input type="text" id="title" name="title" value="{{ old('title') }}" required autofocus placeholder="Judul artikel...">
                     <x-input-error :messages="$errors->get('title')" class="mt-2" />
                 </div>
 
                 <div class="form-row">
-                    <label for="slug">Slug (Contoh: judul-post-baru)</label>
-                    <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required />
+                    <label for="slug">Slug URL</label>
+                    <input type="text" id="slug" name="slug" value="{{ old('slug') }}" required placeholder="judul-artikel-unik">
                     <x-input-error :messages="$errors->get('slug')" class="mt-2" />
                 </div>
 
                 <div class="form-row">
-                    <label for="excerpt">Ringkasan (Excerpt)</label>
-                    <textarea id="excerpt" name="excerpt">{{ old('excerpt') }}</textarea>
+                    <label for="excerpt">Ringkasan Singkat (Excerpt)</label>
+                    <textarea id="excerpt" name="excerpt" rows="3" placeholder="Ringkasan yang muncul di halaman depan...">{{ old('excerpt') }}</textarea>
                     <x-input-error :messages="$errors->get('excerpt')" class="mt-2" />
                 </div>
 
                 <div class="form-row">
-                    <label for="body">Konten</label>
-                    <textarea id="body" name="body">{{ old('body') }}</textarea>
+                    <label for="body">Isi Artikel Lengkap</label>
+                    <textarea id="body" name="body" rows="10" placeholder="Tulis konten lengkap di sini...">{{ old('body') }}</textarea>
                     <x-input-error :messages="$errors->get('body')" class="mt-2" />
                 </div>
 
                 <div class="form-row">
-                    <label for="image">Gambar Post (Opsional)</label>
-                    <input id="image" name="image" type="file" />
+                    <label for="image">Gambar Sampul (Opsional)</label>
+                    <input id="image" name="image" type="file" accept="image/*" style="padding: 10px; background: rgba(255,255,255,0.05); width: 100%;">
+                    <p style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">*Gambar akan disimpan di folder public/img/posts</p>
                     <x-input-error :messages="$errors->get('image')" class="mt-2" />
                 </div>
 
-                <div class="form-row">
-                    <label><input type="checkbox" name="is_published" value="1" /> Terbitkan sekarang (Publish)</label>
+                <div class="form-row" style="display: flex; align-items: center; gap: 10px;">
+                    <input type="hidden" name="is_published" value="0">
+                    <input type="checkbox" name="is_published" value="1" id="is_published" {{ old('is_published') ? 'checked' : '' }} style="width: auto;">
+                    <label for="is_published" style="margin-bottom: 0; cursor: pointer;">Langsung Terbitkan (Publish)</label>
                 </div>
 
                 <div class="form-actions">
-                    <x-primary-button>{{ __('Simpan Post') }}</x-primary-button>
+                    <button type="submit" class="btn" style="cursor: pointer;">
+                        {{ __('Simpan Post') }}
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </x-app-layout>
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Tambah Post Baru') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    
-                    <form method="POST" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data">
-                        @csrf 
-
-                        <div>
-                            <x-input-label for="title" :value="__('Judul Post')" />
-                            <x-text-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')" required autofocus />
-                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-input-label for="slug" :value="__('Slug (URL Unik)')" />
-                            <x-text-input id="slug" class="block mt-1 w-full" type="text" name="slug" :value="old('slug')" required />
-                            <x-input-error :messages="$errors->get('slug')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-input-label for="category_id" :value="__('Kategori')" />
-                            <select id="category_id" name="category_id" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" required>
-                                <option value="" disabled selected>-- Pilih Kategori --</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-input-label for="excerpt" :value="__('Ringkasan Singkat (Excerpt)')" />
-                            <textarea id="excerpt" name="excerpt" rows="3" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" required>{{ old('excerpt') }}</textarea>
-                            <x-input-error :messages="$errors->get('excerpt')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-input-label for="body" :value="__('Isi Artikel Lengkap (Body)')" />
-                            <textarea id="body" name="body" rows="10" class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block mt-1 w-full" required>{{ old('body') }}</textarea>
-                            <x-input-error :messages="$errors->get('body')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-input-label for="image" :value="__('Gambar Utama/Sampul (Max 2MB)')" />
-                            <input id="image" class="block mt-1 w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" type="file" name="image" />
-                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
-                        </div>
-
-                        <div class="block mt-4">
-                            <label for="is_published" class="inline-flex items-center">
-                                <input id="is_published" type="checkbox" name="is_published" value="1" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" {{ old('is_published') ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Langsung Publikasikan (Published)') }}</span>
-                            </label>
-                        </div>
-
-                        <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ml-3">
-                                <div class="admin-page">
-                                    <form method="POST" action="{{ route('admin.posts.store') }}" enctype="multipart/form-data">
-                                        @csrf
-
-                                        <div class="form-row">
-                                            <label for="category_id">Kategori</label>
-                                            <select id="category_id" name="category_id">
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                                @endforeach
-                                            </select>
-                                            <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
-                                        </div>
-
-                                        <div class="form-row">
-                                            <label for="title">Judul</label>
-                                            <x-text-input id="title" type="text" name="title" :value="old('title')" required autofocus />
-                                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
-                                        </div>
-
-                                        <div class="form-row">
-                                            <label for="slug">Slug (Contoh: judul-post-baru)</label>
-                                            <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required />
-                                            <x-input-error :messages="$errors->get('slug')" class="mt-2" />
-                                        </div>
-
-                                        <div class="form-row">
-                                            <label for="excerpt">Ringkasan (Excerpt)</label>
-                                            <textarea id="excerpt" name="excerpt">{{ old('excerpt') }}</textarea>
-                                            <x-input-error :messages="$errors->get('excerpt')" class="mt-2" />
-                                        </div>
-
-                                        <div class="form-row">
-                                            <label for="body">Konten</label>
-                                            <textarea id="body" name="body">{{ old('body') }}</textarea>
-                                            <x-input-error :messages="$errors->get('body')" class="mt-2" />
-                                        </div>
-
-                                        <div class="form-row">
-                                            <label for="image">Gambar Post (Opsional)</label>
-                                            <input id="image" name="image" type="file" />
-                                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
-                                        </div>
-
-                                        <div class="form-row">
-                                            <label><input type="checkbox" name="is_published" /> Terbitkan sekarang (Publish)</label>
-                                        </div>
-
-                                        <div class="form-actions">
-                                            <x-primary-button>{{ __('Simpan Post') }}</x-primary-button>
-                                        </div>
-                                    </form>
-                                </div>

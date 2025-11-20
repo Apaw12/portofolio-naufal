@@ -31,42 +31,47 @@ class ProjectController extends Controller
     }
 
 
-    public function store(Request $request)
+public function store(Request $request)
 {
-    // 1. Validasi data (TERMASUK GAMBAR)
-    $validated = $request->validate([
+    // 1. Validasi Input
+    $request->validate([
         'title' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:projects',
-        'description' => 'required|string',
-        'repo_url' => 'nullable|string|max:255',
-        'project_url' => 'nullable|string|max:255',
-        'technologies' => 'nullable|string',
-        'is_featured' => 'nullable|boolean',
-        // VALIDASI BARU UNTUK GAMBAR
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Maks 2MB
+        'slug' => 'required|string|max:255|unique:projects,slug',
+        'description' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Maks 2MB
+        'technologies' => 'required', // Bisa string atau array
+        // Validasi lain sesuai kebutuhan...
     ]);
 
-    // 2. Proses string teknologi (Sama seperti sebelumnya)
-    if ($request->filled('technologies')) {
-        $validated['technologies'] = array_map('trim', explode(',', $request->technologies));
+    // 2. Siapkan Data
+    $data = $request->all();
+
+    // Convert technologies dari string "PHP, Laravel" jadi JSON ["PHP", "Laravel"]
+    // (Kecuali kalau abang inputnya sudah array)
+    if (is_string($request->technologies)) {
+        $data['technologies'] = array_map('trim', explode(',', $request->technologies));
     }
 
-    // 3. Proses 'is_featured' (Sama seperti sebelumnya)
-    $validated['is_featured'] = $request->has('is_featured');
-
-    // 4. LOGIKA BARU: Handle Upload Gambar
+    // 3. LOGIKA UPLOAD GAMBAR KE PUBLIC/IMG/PROJECTS
     if ($request->hasFile('image')) {
-        // Simpan gambar ke 'storage/app/public/projects'
-        // dan simpan path-nya ke $validated['image']
-        $path = $request->file('image')->store('projects', 'public');
-        $validated['image'] = $path;
+        $file = $request->file('image');
+
+        // Bikin nama file unik: time_namafileasli.jpg
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Pindahkan file ke folder: public/img/projects
+        $file->move(public_path('img/projects'), $filename);
+
+        // Simpan path string ke database: projects/namafile.jpg
+        $data['image'] = 'projects/' . $filename;
     }
 
-    // 5. Buat dan Simpan data ke database
-    Project::create($validated);
+    // 4. Simpan ke Database
+    // Pastikan model Project sudah di-import: use App\Models\Project;
+    \App\Models\Project::create($data);
 
-    // 6. Kembali ke halaman daftar project
-    return redirect()->route('admin.projects.index')->with('success', 'Project baru berhasil ditambahkan!');
+    // 5. Redirect kembali
+    return redirect()->route('admin.projects.index')->with('success', 'Project berhasil ditambahkan!');
 }
 
     /**
@@ -123,7 +128,7 @@ class ProjectController extends Controller
 
         // 5. LOGIKA BARU: Handle Upload Gambar (Jika ada gambar baru)
         if ($request->hasFile('image')) {
-            
+
             // Hapus gambar lama (JIKA ADA)
             if ($project->image) {
                 Storage::disk('public')->delete($project->image);
