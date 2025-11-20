@@ -4,47 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $project->title }}</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
-<body class="bg-black text-white">
+<body>
 
-    <header class="p-6 border-b border-gray-900">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{{ route('home') }}" class="text-2xl font-bold text-white-600">His Majesty's Project</a>
-            <nav>
-                <a href="{{ route('home') }}#projects" class="mx-3 hover:text-red-500">Projects</a>
-                <a href="{{ route('home') }}#blog" class="mx-3 hover:text-red-500">Blog</a>
-                <a href="{{ route('dashboard') }}" class="mx-3 text-sm border px-3 py-1 rounded hover:bg-red-700 border-red-700 transition">Admin Panel</a>
+    <div class="video-background">
+        <video autoplay loop muted playsinline>
+            <source src="{{ asset('videos/vecteezy_red-color-abstract-digital-background_23936261.mp4') }}" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
+    <header class="main-header">
+        <div class="container">
+            <a href="{{ route('home') }}" class="logo">Naufal Portfolio</a>
+            <nav class="main-nav">
+                <a href="{{ route('home') }}#projects">Projects</a>
+                <a href="{{ route('home') }}#blog">Blog</a>
+                <a href="{{ route('dashboard') }}" class="nav-button">Admin Panel</a>
             </nav>
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto p-6">
-        
-        <a href="{{ route('home') }}#projects" class="inline-block text-red-600 hover:text-red-500 mb-6">&larr; Kembali ke Home</a>
+    <main class="container">
+        <div class="detail-page">
+            <a href="{{ route('home') }}#projects" class="back-link">&larr; Kembali ke Home</a>
 
-        <h1 class="text-4xl font-extrabold text-red-600 mb-4">{{ $project->title }}</h1>
+            <h1 class="detail-title">{{ $project->title }}</h1>
 
-        @if ($project->image)
-            <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="w-full h-auto object-cover rounded-lg mb-6 shadow-xl">
-        @endif
-
-        <div class="bg-gray-950 p-6 rounded-lg mb-6">
-            <h3 class="text-xl font-semibold mb-4">Project Info</h3>
-            <p class="mb-2"><strong>Teknologi:</strong> <span class="text-gray-300">{{ implode(', ', $project->technologies) }}</span></p>
-            @if ($project->repo_url)
-                <p class="mb-2"><strong>GitHub Repo:</strong> <a href="{{ $project->repo_url }}" target="_blank" class="text-red-500 hover:underline">Lihat Kode</a></p>
+            @if ($project->image)
+                <img src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" class="detail-image">
             @endif
-            @if ($project->project_url)
-                <p><strong>Demo Live:</strong> <a href="{{ $project->project_url }}" target="_blank" class="text-red-500 hover:underline">Lihat Demo</a></p>
-            @endif
-        </div>
 
-        <div class="prose prose-invert max-w-none text-gray-300">
-            <h3 class="text-xl font-semibold mb-4 text-white">Deskripsi Lengkap:</h3>
-            <p>{{ $project->description }}</p>
-        </div>
+            <div class="project-info card">
+                <h3>Project Info</h3>
+                <p><strong>Teknologi:</strong> {{ implode(', ', $project->technologies) }}</p>
+                @if ($project->repo_url)
+                    <p><strong>GitHub Repo:</strong> <a href="{{ $project->repo_url }}" target="_blank">Lihat Kode</a></p>
+                @endif
+                @if ($project->project_url)
+                    <p><strong>Demo Live:</strong> <a href="{{ $project->project_url }}" target="_blank">Lihat Demo</a></p>
+                @endif
+            </div>
 
+            <div class="detail-content">
+                <h3>Deskripsi Lengkap:</h3>
+                <p>{{ $project->description }}</p>
+            </div>
+        </div>
     </main>
 </body>
 </html>

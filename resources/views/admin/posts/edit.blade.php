@@ -5,6 +5,75 @@
         </h2>
     </x-slot>
 
+    <div class="admin-page">
+        <div class="admin-card">
+            <div class="admin-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+                <h2 style="font-size:1.5rem; font-weight:700; color:#fff;">Edit Post: {{ $post->title }}</h2>
+                <a href="{{ route('admin.posts.index') }}" class="btn">Kembali</a>
+            </div>
+
+            <form method="POST" action="{{ route('admin.posts.update', $post->id) }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+
+                <div class="form-row">
+                    <label for="category_id">Kategori</label>
+                    <select id="category_id" name="category_id">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}" {{ $post->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label for="title">Judul</label>
+                    <x-text-input id="title" type="text" name="title" :value="old('title', $post->title)" required autofocus />
+                    <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label for="slug">Slug (Contoh: judul-post-baru)</label>
+                    <x-text-input id="slug" type="text" name="slug" :value="old('slug', $post->slug)" required />
+                    <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label for="excerpt">Ringkasan (Excerpt)</label>
+                    <textarea id="excerpt" name="excerpt">{{ old('excerpt', $post->excerpt) }}</textarea>
+                    <x-input-error :messages="$errors->get('excerpt')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label for="body">Konten</label>
+                    <textarea id="body" name="body">{{ old('body', $post->body) }}</textarea>
+                    <x-input-error :messages="$errors->get('body')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label for="image">Gambar Post (Opsional)</label>
+                    <input id="image" name="image" type="file" />
+                    <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label><input type="checkbox" name="is_published" {{ $post->is_published ? 'checked' : '' }} /> Terbitkan sekarang (Publish)</label>
+                </div>
+
+                <div class="form-actions">
+                    <x-primary-button>{{ __('Update Post') }}</x-primary-button>
+                </div>
+            </form>
+        </div>
+    </div>
+</x-app-layout>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Edit Post: ' . $post->title) }}
+        </h2>
+    </x-slot>
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -72,13 +141,57 @@
 
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ml-3">
-                                {{ __('Update Post') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                                <div class="admin-page">
+                                    <form method="POST" action="{{ route('admin.posts.update', $post) }}" enctype="multipart/form-data">
+                                        @csrf
+                                        @method('PUT')
 
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+                                        <div class="form-row">
+                                            <label for="category_id">Kategori</label>
+                                            <select id="category_id" name="category_id">
+                                                @foreach ($categories as $category)
+                                                    <option value="{{ $category->id }}" {{ $post->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label for="title">Judul</label>
+                                            <x-text-input id="title" type="text" name="title" :value="old('title', $post->title)" required autofocus />
+                                            <x-input-error :messages="$errors->get('title')" class="mt-2" />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label for="slug">Slug (Contoh: judul-post-baru)</label>
+                                            <x-text-input id="slug" type="text" name="slug" :value="old('slug', $post->slug)" required />
+                                            <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label for="excerpt">Ringkasan (Excerpt)</label>
+                                            <textarea id="excerpt" name="excerpt">{{ old('excerpt', $post->excerpt) }}</textarea>
+                                            <x-input-error :messages="$errors->get('excerpt')" class="mt-2" />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label for="body">Konten</label>
+                                            <textarea id="body" name="body">{{ old('body', $post->body) }}</textarea>
+                                            <x-input-error :messages="$errors->get('body')" class="mt-2" />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label for="image">Gambar Post (Opsional)</label>
+                                            <input id="image" name="image" type="file" />
+                                            <x-input-error :messages="$errors->get('image')" class="mt-2" />
+                                        </div>
+
+                                        <div class="form-row">
+                                            <label><input type="checkbox" name="is_published" {{ $post->is_published ? 'checked' : '' }} /> Terbitkan sekarang (Publish)</label>
+                                        </div>
+
+                                        <div class="form-actions">
+                                            <x-primary-button>{{ __('Update Post') }}</x-primary-button>
+                                        </div>
+                                    </form>
+                                </div>

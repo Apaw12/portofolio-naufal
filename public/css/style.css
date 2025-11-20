@@ -1,0 +1,509 @@
+/* Import Font (Opsional, tapi ini yang bikin keren) */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* === 1. PENGATURAN DASAR & BACKGROUND === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #000;
+    color: #fff;
+    line-height: 1.6;
+}
+
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    overflow: hidden;
+}
+
+.video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75); /* Lapisan gelap di atas video */
+}
+
+/* Sembunyikan video di HP (agar hemat baterai & kuota) */
+@media (max-width: 768px) {
+    .video-background {
+        display: none;
+    }
+    body {
+        /* Jika video tidak ada, body tetap hitam */
+        background-color: #000;
+    }
+}
+
+/* === 2. LAYOUT & HEADER === */
+.container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.main-header {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #222; /* Garis batas gelap */
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.75rem;
+    color: #DC2626; /* Merah (Red-600) */
+    text-decoration: none;
+    font-weight: 900;
+}
+
+.main-nav a {
+    margin-left: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.main-nav a:hover {
+    color: #EF4444; /* Merah (Red-500) */
+}
+
+.nav-button {
+    border: 2px solid #B91C1C; /* Merah (Red-700) */
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-button:hover {
+    background-color: #B91C1C;
+    color: #fff;
+}
+
+/* === 3. HERO SECTION (FOTO & TEKS) === */
+.hero {
+    padding: 4rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.hero-text {
+    flex-basis: 60%;
+}
+
+.hero-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: #a0a0a0;
+}
+
+.hero-image {
+    flex-basis: 35%;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-image img {
+    width: 200px; /* Ukuran foto 48 */
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #B91C1C; /* Border merah */
+    /* Efek "Monster" (Glow) */
+    box-shadow: 0 0 30px rgba(185, 28, 28, 0.6); 
+}
+
+/* === 4. JUDUL SECTION === */
+.section-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    border-bottom: 2px solid #B91C1C;
+    padding-bottom: 0.5rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+}
+
+/* === 5. CARD (PROJECT & POST) === */
+.grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: #0A0A0A; /* Hitam sedikit lebih terang (Gray-950) */
+    border-radius: 8px;
+    overflow: hidden;
+    padding: 1.5rem;
+    /* Efek "Monster" (Glow tipis) */
+    box-shadow: 0 0 15px rgba(185, 28, 28, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02); /* Efek "maju" */
+    box-shadow: 0 0 25px rgba(185, 28, 28, 0.3); /* Glow lebih kuat */
+}
+
+.card-image {
+    width: 100%;
+    height: 160px; /* Tinggi 40 */
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #DC2626; /* Merah */
+    margin-bottom: 0.5rem;
+}
+
+.card-category {
+    font-size: 0.8rem;
+    color: #DC2626;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.card-excerpt {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+    margin-bottom: 1rem;
+}
+
+.card-tech {
+    font-size: 0.8rem;
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+.card-link {
+    color: #EF4444; /* Merah (Red-500) */
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.card-link:hover {
+    text-decoration: underline;
+}
+
+.author-bio {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.author-avatar {
+    width: 32px; /* Ukuran 8 */
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.5rem;
+}
+
+.author-name {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+/* === 6. HALAMAN DETAIL (PROJECT & POST) === */
+.detail-page {
+    padding: 2rem 0;
+}
+
+.back-link {
+    color: #EF4444;
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.detail-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+
+.detail-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.project-info {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+.project-info h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.project-info a {
+    color: #EF4444;
+}
+
+.detail-content {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #ccc;
+    white-space: pre-wrap; /* Agar paragraf/line break tetap ada */
+}
+.detail-content h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.author-bio-large {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    color: #a0a0a0;
+}
+
+.author-avatar-large {
+    width: 50px; /* Ukuran 12 */
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+    border: 3px solid #B91C1C;
+    box-shadow: 0 0 15px rgba(185, 28, 28, 0.4);
+}
+.author-name-large {
+    color: #EF4444;
+    font-weight: 700;
+}
+
+
+/* === 7. RESPONSIVE (AGAR TIDAK HANCUR DI HP) === */
+@media (max-width: 768px) {
+    .grid-3-col {
+        grid-template-columns: 1fr; /* 1 kolom di HP */
+    }
+    
+    .hero {
+        flex-direction: column-reverse; /* Foto di atas, teks di bawah */
+        text-align: center;
+    }
+
+    .main-header .container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .main-nav {
+        text-align: center;
+    }
+    .main-nav a {
+        margin: 0 0.5rem;
+    }
+}
+
+/* === 8. AUTH (LOGIN / REGISTER) - simple layout without Tailwind === */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+.logo-container .app-logo {
+    width: 80px;
+    height: 80px;
+    display: block;
+    margin: 0 auto;
+}
+
+/* Force SVG logo to be white so it shows on dark background */
+.logo-container .app-logo path {
+    fill: #ffffff !important;
+}
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    margin-top: 1rem;
+    padding: 1.25rem;
+    background: rgba(10,10,10,0.85);
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+.auth-card form > div { margin-bottom: 0.75rem; }
+.auth-card input[type="email"], .auth-card input[type="password"], .auth-card input[type="text"] {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    background: rgba(255,255,255,0.03);
+    color: #fff;
+}
+.auth-card input::placeholder { color: rgba(255,255,255,0.5); }
+.auth-card label { display:block; margin-bottom: 0.25rem; font-weight:600; color: #fff; }
+.auth-card .ms-2 { margin-left: 0.5rem; }
+.auth-card .underline { text-decoration: underline; color: #93c5fd; }
+.auth-card a { color: #93c5fd; }
+.auth-card .primary-button {
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    background: #dc2626;
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+/* stronger hover/focus/active for accessibility and clearer affordance */
+.primary-button {
+    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+.primary-button:hover {
+    background-color: #b91c1c; /* darker red */
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+.primary-button:active {
+    transform: translateY(0);
+    background-color: #991b1b;
+}
+.primary-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(220,38,38,0.18), 0 8px 20px rgba(0,0,0,0.45);
+}
+
+/* === ADMIN NAV (simple replacement for Tailwind nav) === */
+.admin-nav {
+    position: relative;
+    z-index: 40;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 0.4rem 0;
+}
+.admin-nav .admin-nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+.nav-bar { display:flex; align-items:center; gap:1rem; }
+.nav-links { display:flex; gap:1rem; align-items:center; }
+.nav-links a { color: #EF4444; text-decoration: none; font-weight:600; }
+.nav-links a:hover { color: #DC2626; }
+.profile-desktop { display:flex; align-items:center; gap:0.5rem; }
+.profile-trigger { display:inline-flex; align-items:center; gap:0.5rem; background:transparent; border:none; color:#fff; cursor:pointer; }
+.profile-trigger .chev path { fill: #fff; }
+.profile-trigger:hover { background: rgba(255,255,255,0.02); border-radius:6px; padding:4px 6px; }
+.mobile-toggle { display:none; }
+.mobile-button { background:transparent; border:none; color:#fff; padding:6px; cursor:pointer; }
+.responsive-nav { display:none; padding: 0.5rem 1rem; }
+.responsive-nav .responsive-links { display:flex; flex-direction:column; gap:0.5rem; }
+.responsive-profile { padding-top:0.75rem; border-top:1px solid rgba(255,255,255,0.04); color:#fff; }
+.profile-name { font-weight:700; }
+.profile-email { font-size:0.9rem; color:#ddd; margin-bottom:0.5rem; }
+
+/* Dropdown content */
+.dropdown-content {
+    position: absolute;
+    z-index: 50;
+    margin-top: 0.5rem;
+    min-width: 12rem;
+    right: 0;
+}
+.dropdown-inner { background: #0a0a0a; color:#fff; border-radius:0.5rem; box-shadow:0 12px 30px rgba(0,0,0,0.6); padding:0.5rem; border:1px solid rgba(255,255,255,0.03); }
+.dropdown-inner a { color:#EF4444; display:block; padding:0.35rem 0.5rem; text-decoration:none; }
+.dropdown-inner a:hover { background: rgba(255,255,255,0.02); }
+
+@media (max-width: 768px) {
+    .nav-links { display:none; }
+    .profile-desktop { display:none; }
+    .mobile-toggle { display:flex; }
+    .responsive-nav { display:block; }
+}
+
+/* === ADMIN TABLES & FORMS === */
+.admin-page { padding: 1.5rem; max-width:1140px; margin:1.5rem auto; }
+.admin-actions { margin-bottom: 1rem; }
+.btn { display:inline-block; padding:0.5rem 0.9rem; background:#DC2626; color:#fff; border-radius:6px; text-decoration:none; }
+.btn:hover { background:#b91c1c; }
+.admin-table { width:100%; border-collapse:collapse; margin-top:0.75rem; }
+.admin-table thead th { text-align:left; padding:0.9rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.06); color:#fff; font-weight:700; background: rgba(220,38,38,0.04); }
+.admin-table tbody td { padding:0.9rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.03); color:#ddd; }
+.admin-table tbody tr:hover td { background: rgba(255,255,255,0.01); }
+.admin-table tbody tr:nth-child(even) td { background: rgba(220,38,38,0.02); }
+.admin-table td.actions { text-align:right; vertical-align:middle; }
+.admin-table .actions a, .admin-table .actions button { margin-right:0.5rem; color:#EF4444; text-decoration:none; background:transparent; border:none; cursor:pointer; }
+.admin-table .actions .delete-btn { color:#f87171; }
+
+.nav-logout { background:transparent; border:none; color:#fca5a5; cursor:pointer; padding:6px 8px; border-radius:6px; }
+.nav-logout:hover { color:#fff; background:rgba(185,28,28,0.12); }
+
+/* Help long URLs wrap inside table cells */
+.admin-table td.wrap {
+    max-width: 420px;
+    word-break: break-word;
+    white-space: normal;
+}
+.admin-table td.wrap a { color: #93c5fd; text-decoration:underline; }
+/* Form styles inside admin pages */
+.admin-page form { background: transparent; }
+.admin-page .form-row { margin-bottom:0.9rem; }
+.admin-page label { display:block; margin-bottom:0.25rem; color:#fff; font-weight:600; }
+.admin-page input[type="text"], .admin-page input[type="email"], .admin-page input[type="file"], .admin-page textarea, .admin-page select {
+    width:100%; padding:0.5rem 0.6rem; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color:#fff;
+}
+.admin-page textarea { min-height:120px; }
+.admin-page .form-actions { margin-top:1rem; text-align:right; }
+
+/* Add a subtle red card behind admin content to separate from black background */
+.admin-card {
+    background: rgba(220,38,38,0.05);
+    border: 1px solid rgba(220,38,38,0.08);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+/* Ensure layout header containers align with admin content width */
+.max-w-7xl { max-width:1140px; margin:0 auto; }
+.mx-auto { margin-left:auto; margin-right:auto; }
+.py-6 { padding-top:1.5rem; padding-bottom:1.5rem; }
+.px-4 { padding-left:1rem; padding-right:1rem; }
+

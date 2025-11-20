@@ -5,33 +5,31 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-
-                    <form method="POST" action="{{ route('admin.categories.store') }}">
-                        @csrf <div>
-                            <x-input-label for="name" :value="__('Nama Kategori')" />
-                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                        </div>
-
-                        <div class="mt-4">
-                            <x-input-label for="slug" :value="__('Slug (Contoh: web-development)')" />
-                            <x-text-input id="slug" class="block mt-1 w-full" type="text" name="slug" :value="old('slug')" required />
-                            <x-input-error :messages="$errors->get('slug')" class="mt-2" />
-                        </div>
-
-                        <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ml-3">
-                                {{ __('Simpan Kategori') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
-
-                </div>
+    <div class="admin-page">
+        <div class="admin-card">
+            <div class="admin-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+                <h2 style="font-size:1.5rem; font-weight:700; color:#fff;">Tambah Kategori Baru</h2>
+                <a href="{{ route('admin.categories.index') }}" class="btn">Kembali</a>
             </div>
+
+            <form method="POST" action="{{ route('admin.categories.store') }}">
+                @csrf
+                <div class="form-row">
+                    <label for="name">Nama Kategori</label>
+                    <x-text-input id="name" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                </div>
+
+                <div class="form-row">
+                    <label for="slug">Slug (Contoh: web-development)</label>
+                    <x-text-input id="slug" type="text" name="slug" :value="old('slug')" required />
+                    <x-input-error :messages="$errors->get('slug')" class="mt-2" />
+                </div>
+
+                <div class="form-actions">
+                    <x-primary-button>{{ __('Simpan Kategori') }}</x-primary-button>
+                </div>
+            </form>
         </div>
     </div>
 </x-app-layout>
